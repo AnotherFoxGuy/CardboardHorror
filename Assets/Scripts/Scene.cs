@@ -3,36 +3,70 @@ using System.Collections;
 
 public class Scene : MonoBehaviour
 {
-    private GameObject[] _scenes;
+    public GameObject[] Scenes;
     private int _scene = 1;
+
+    public bool TriggerEnter;
+    public bool TriggerOnce;
+
+    private bool _trigger = true;
 
     void Start()
     {
-        _scenes = GameObject.FindGameObjectsWithTag("Scene");
-        for (int i = 0; i < _scenes.Length - 1; i++)
+        for (int i = Scenes.Length - 1; i > 0; i--)
         {
-            _scenes[i].SetActive(false);
+            Scenes[i].SetActive(false);
         }
-        _scene = _scenes.Length - 1;
+        _scene = 0;
     }
 
     // Update is called once per frame
     void OnTriggerEnter()
     {
+        if (TriggerEnter)
+        {
+            Trigger();
+        }
+    }
+
+    void OnTriggerExit()
+    {
+        if (!TriggerEnter)
+        {
+            Trigger();
+        }
+    }
+
+    void Trigger()
+    {
+        if (TriggerOnce && _trigger)
+        {
+            _trigger = false;
+            TriggerTwo();
+
+        }
+        else if (!TriggerOnce)
+        {
+            TriggerTwo();
+        }
+    }
+
+    void TriggerTwo()
+    {
         _scene--;
         if (_scene < 0)
         {
-            _scene = _scenes.Length -1;
+            _scene = Scenes.Length - 1;
         }
-        for (int i = 0; i < _scenes.Length; i++)
+        for (int i = 0; i < Scenes.Length; i++)
         {
             if (_scene == i)
             {
-                _scenes[i].SetActive(true);
+                Scenes[i].SetActive(true);
             }
             else
             {
-                _scenes[i].SetActive(false);
+                Scenes[i].SetActive(false);
             }
         }
     }
